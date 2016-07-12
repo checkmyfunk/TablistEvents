@@ -1,0 +1,96 @@
+//
+//  EventsListViewController.swift
+//  TablistEvents
+//
+//  Created by Vitali Potchekin on 7/9/16.
+//  Copyright © 2016 Vitali Potchekin. All rights reserved.
+//
+
+import UIKit
+
+class Station {
+    var name: String?
+    var yearBuilt: String?
+}
+
+class EventsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
+    
+    @IBOutlet weak var eventsTableView: UITableView!
+    
+    var data = NSMutableData()
+    var allStations = [Station]()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do view setup here.
+        
+        self.eventsTableView.dataSource = self
+        self.eventsTableView.delegate = self
+        
+        let requestURL: NSURL = NSURL(string: "http://www.learnswiftonline.com/Samples/subway.json")!
+        let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: requestURL)
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(urlRequest) {
+            (data, response, error) -> Void in
+            
+            let httpResponse = response as! NSHTTPURLResponse
+            let statusCode = httpResponse.statusCode
+            
+            if (statusCode == 200) {
+                print("Everyone is fine, file downloaded successfully.")
+                
+                do {
+                   let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
+                    
+                    if let stations = jsonResult["stations"] as? [[String: AnyObject]] {
+                        for station in stations {
+                            if let name = station["stationName"] as? String {
+                                if let year = station["buildYear"] as? String {
+                                    let tempStation = Station()
+                                    tempStation.name = name
+                                    tempStation.yearBuilt = year
+                                    self.allStations.append(tempStation)
+                                    print(name, year, self.allStations.count)
+                                }
+                            }
+                        }
+                    }
+                    
+//                    self.data.appendData(data!)
+//                    let string1 = NSString(data: self.data, encoding: NSUTF8StringEncoding)
+//                    print(string1, jsonResult)
+                    
+                } catch {
+                    print("Error with Json: \(error)")
+                }
+            }
+        }
+        
+        task.resume()
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        print(self.allStations.count)
+        self.eventsTableView.reloadData()
+    }
+    
+    //TableView methods
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.allStations.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = self.eventsTableView.dequeueReusableCellWithIdentifier("eventCell") as! EventCell
+        cell.stationNameLabel.text = self.allStations[indexPath.row].name
+        cell.stationYearBuiltLabel.text = self.allStations[indexPath.row].yearBuilt
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+    }
+    
+}
