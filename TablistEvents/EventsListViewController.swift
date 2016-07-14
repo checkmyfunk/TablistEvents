@@ -99,8 +99,8 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         let url: String = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
         print(url)
         
-        let requestURL: NSURL = NSURL(string: url)!
-        let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: requestURL)
+        let requestURL = NSURL(string: url)!
+        let urlRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
         
         let task = session.dataTaskWithRequest(urlRequest) {
