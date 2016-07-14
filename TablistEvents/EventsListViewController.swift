@@ -92,15 +92,14 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     func loadData() {
-        let accessToken : NSString = FBSDKAccessToken.currentAccessToken().tokenString
-        let latitude : NSString = NSString(string: "40.730610")
-        let longitude : NSString = NSString(string:"-73.935242")
-        let distance : NSString = NSString(string:"1000")
-        let url: NSString = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + (latitude as String) + "," + (longitude as String) + "&distance=" + (distance as String) + "&limit=1000&fields=id&access_token=" + (accessToken as String)
-        
+        let accessToken : String = FBSDKAccessToken.currentAccessToken().tokenString
+        let latitude : String = "40.730610"
+        let longitude : String = "-73.935242"
+        let distance : String = "1000"
+        let url: String = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
         print(url)
         
-        let requestURL: NSURL = NSURL(string: url as String)!
+        let requestURL: NSURL = NSURL(string: url)!
         let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
         
