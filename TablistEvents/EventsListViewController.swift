@@ -7,10 +7,15 @@
 //
 
 import UIKit
+import FBSDKLoginKit
 
-class Station {
-    var name: String?
-    var yearBuilt: String?
+
+class Venue {
+    var id: String?
+}
+
+class Event {
+
 }
 
 class EventsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
@@ -18,7 +23,7 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var eventsTableView: UITableView!
     
     var data = NSMutableData()
-    var allStations: [Station] = []
+    var allVenues: [Venue] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +34,6 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     override func viewWillAppear(animated: Bool) {
-        //print(self.allStations.count)
 
         self.loadData()
         
@@ -60,7 +64,7 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     @IBAction func clear(sender: AnyObject) {
-        self.allStations = []
+        self.allVenues = []
         self.eventsTableView.reloadData()
     }
     
@@ -88,14 +92,22 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     func loadData() {
-        let requestURL: NSURL = NSURL(string: "http://www.learnswiftonline.com/Samples/subway.json")!
+        let accessToken : NSString = FBSDKAccessToken.currentAccessToken().tokenString
+        let latitude : NSString = NSString(string: "40.730610")
+        let longitude : NSString = NSString(string:"-73.935242")
+        let distance : NSString = NSString(string:"1000")
+        let url: NSString = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + (latitude as String) + "," + (longitude as String) + "&distance=" + (distance as String) + "&limit=1000&fields=id&access_token=" + (accessToken as String)
+        
+        print(url)
+        
+        let requestURL: NSURL = NSURL(string: url as String)!
         let urlRequest: NSMutableURLRequest = NSMutableURLRequest(URL: requestURL)
         let session = NSURLSession.sharedSession()
         
         let task = session.dataTaskWithRequest(urlRequest) {
             (data, response, error) -> Void in
             
-            self.allStations = []
+            self.allVenues = []
             
             let httpResponse = response as! NSHTTPURLResponse
             let statusCode = httpResponse.statusCode
@@ -106,17 +118,12 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
                 do {
                     let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
                     
-                    if let stations = jsonResult["stations"] as? [[String: AnyObject]] {
-                        for station in stations {
-                            if let name = station["stationName"] as? String {
-                                if let year = station["buildYear"] as? String {
-                                    let tempStation = Station()
-                                    tempStation.name = name
-                                    tempStation.yearBuilt = year
-                                    self.allStations.append(tempStation)
-                                    //print(name, year, self.allStations.count)
-                                    
-                                }
+                    if let data = jsonResult["data"] as? [[String: AnyObject]] {
+                        for dataEntry in data {
+                            if let id = dataEntry["id"] as? String {
+                                let tempVenue = Venue()
+                                tempVenue.id = id
+                                self.allVenues.append(tempVenue)
                             }
                         }
                     }
@@ -125,11 +132,6 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
                     dispatch_async(dispatch_get_main_queue(), {
                         self.eventsTableView.reloadData()
                     })
-                    
-                    
-                    //                    self.data.appendData(data!)
-                    //                    let string1 = NSString(data: self.data, encoding: NSUTF8StringEncoding)
-                    //                    print(string1, jsonResult)
                     
                 } catch {
                     print("Error with Json: \(error)")
@@ -144,13 +146,12 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     //TableView methods
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.allStations.count
+        return self.allVenues.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = self.eventsTableView.dequeueReusableCellWithIdentifier("eventCell") as! EventCell
-        cell.stationNameLabel.text = self.allStations[indexPath.row].name
-        cell.stationYearBuiltLabel.text = self.allStations[indexPath.row].yearBuilt
+        cell.stationNameLabel.text = self.allVenues[indexPath.row].id
         return cell
     }
     
