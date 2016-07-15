@@ -83,6 +83,9 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
             
             //check if allVenues is not empty and make a new call for Events with Venue ID's as parameter
             //call httpRequestforURL with new url,
+            
+            
+            
         }
     }
     
