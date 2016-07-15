@@ -34,16 +34,35 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     override func viewWillAppear(animated: Bool) {
+        self.loadData()
         
+    }
+    
+    @IBAction func reload(sender: AnyObject) {
+        self.loadData()
+    }
+    
+    @IBAction func clear(sender: AnyObject) {
+        self.allVenues = []
+        self.eventsTableView.reloadData()
+    }
+    
+    func loadData(){
+        
+        //add dictionary here
         let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
         let latitude  = "40.730610"
         let longitude = "-73.935242"
         let distance  = "1000"
         let url = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
-
-        //self.loadData()
         
-        self.test(NSMutableURLRequest(URL: NSURL(string: url)!)) { (json) in
+        let http = HTTP()
+        
+        //http.requestsForURL(<#T##url: String##String#>, withParameters: <#T##[String : AnyObject?]#>)
+        
+        //pass it into http.test
+        
+        http.test(NSMutableURLRequest(URL: NSURL(string: url)!)) { (json) in
             
             self.allVenues = []
             //TODO: do something
@@ -57,91 +76,15 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
                     }
                 }
             }
+            
+            //remove this method
             self.eventsTableView.reloadData()
+            
+            
+            //check if allVenues is not empty and make a new call for Events with Venue ID's as parameter
+            //call httpRequestforURL with new url,
         }
     }
-    
-    @IBAction func reload(sender: AnyObject) {
-        
-    }
-    
-    @IBAction func clear(sender: AnyObject) {
-        self.allVenues = []
-        self.eventsTableView.reloadData()
-    }
-    
-    
-    func test(request: NSMutableURLRequest, completionHandler: (NSDictionary? -> Void)) {
-        
-        let session = NSURLSession.sharedSession()
-        let task = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
-            var JSON: NSDictionary? = nil
-
-            if let data = data {
-                do {
-                    JSON = try NSJSONSerialization.JSONObjectWithData(data, options: []) as? NSDictionary
-                } catch {
-                    JSON = nil
-                }
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                completionHandler(JSON)
-            })
-            
-        }
-        task.resume()
-    }
-
-//    func loadData() {
-//        let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
-//        let latitude  = "40.730610"
-//        let longitude = "-73.935242"
-//        let distance  = "1000"
-//        let url = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
-//       
-//        guard let requestURL = NSURL(string: url) else {
-//            return
-//        }
-//        
-//        let urlRequest = NSMutableURLRequest(URL: requestURL)
-//        let session = NSURLSession.sharedSession()
-//        
-//        let task = session.dataTaskWithRequest(urlRequest) { (data, response, error) -> Void in
-//            
-//            self.allVenues = []
-//            
-//            if let httpResponse = response as? NSHTTPURLResponse {
-//                let statusCode = httpResponse.statusCode
-//            
-//                if (statusCode == 200) {
-//                    print("Everyone is fine, file downloaded successfully.")
-//                
-//                    do {
-//                        let jsonResult: NSDictionary = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as! NSDictionary
-//                    
-//                        if let data = jsonResult["data"] as? [[String: AnyObject]] {
-//                            for dataEntry in data {
-//                                if let id = dataEntry["id"] as? String {
-//                                    let tempVenue = Venue()
-//                                    tempVenue.id = id
-//                                    self.allVenues.append(tempVenue)
-//                                }
-//                            }
-//                        }
-//                    } catch {
-//                        print("Error with Json: \(error)")
-//                    }
-//                }
-//            }
-//            
-//            dispatch_async(dispatch_get_main_queue(), {
-//                self.eventsTableView.reloadData()
-//            })
-//        }
-//        task.resume()
-//    }
-
     
     //TableView methods
     

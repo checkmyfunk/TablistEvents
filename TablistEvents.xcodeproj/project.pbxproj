@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5333CFF1D3885D4005BC597 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5333CFE1D3885D4005BC597 /* HTTP.swift */; };
 		F560B0F81D2703D400CFC094 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F560B0F71D2703D400CFC094 /* AppDelegate.swift */; };
 		F560B0FA1D2703D400CFC094 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F560B0F91D2703D400CFC094 /* ViewController.swift */; };
 		F560B0FD1D2703D400CFC094 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F560B0FB1D2703D400CFC094 /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		7428DF681D3862F70056FFA7 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		F5333CFE1D3885D4005BC597 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		F560B0F41D2703D400CFC094 /* TablistEvents.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TablistEvents.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F560B0F71D2703D400CFC094 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F560B0F91D2703D400CFC094 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -72,6 +74,7 @@
 				F560B0F71D2703D400CFC094 /* AppDelegate.swift */,
 				F560B0F91D2703D400CFC094 /* ViewController.swift */,
 				F5B806BF1D316DC50074B7F9 /* EventsListViewController.swift */,
+				F5333CFE1D3885D4005BC597 /* HTTP.swift */,
 				F5B806C11D3480900074B7F9 /* EventCell.swift */,
 				F560B0FB1D2703D400CFC094 /* Main.storyboard */,
 				F560B1011D2703D400CFC094 /* Assets.xcassets */,
@@ -166,6 +169,7 @@
 				F560B0FA1D2703D400CFC094 /* ViewController.swift in Sources */,
 				F5B806C01D316DC50074B7F9 /* EventsListViewController.swift in Sources */,
 				F5B806C21D3480900074B7F9 /* EventCell.swift in Sources */,
+				F5333CFF1D3885D4005BC597 /* HTTP.swift in Sources */,
 				F560B0F81D2703D400CFC094 /* AppDelegate.swift in Sources */,
 				F560B1001D2703D400CFC094 /* TablistEvents.xcdatamodeld in Sources */,
 			);
