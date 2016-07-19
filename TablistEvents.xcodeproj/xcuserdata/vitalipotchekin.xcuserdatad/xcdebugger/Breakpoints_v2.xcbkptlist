@@ -2,4 +2,69 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "TablistEvents/HTTP.swift"
+            timestampString = "490583695.414345"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "requestsForURL(_:withParameters:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TablistEvents.HTTP.requestsForURL (Swift.String, withParameters : Swift.Dictionary&lt;Swift.String, Swift.Optional&lt;Swift.AnyObject&gt;&gt;) -&gt; Swift.Optional&lt;__ObjC.NSMutableURLRequest&gt;"
+                  moduleName = "TablistEvents"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalipotchekin/Developer/TablistEvents/TablistEvents/HTTP.swift"
+                  timestampString = "490583695.742794"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "1977">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TablistEvents.HTTP.requestsForURL (Swift.String, withParameters : Swift.Dictionary&lt;Swift.String, Swift.Optional&lt;Swift.AnyObject&gt;&gt;) -&gt; Swift.Optional&lt;__ObjC.NSMutableURLRequest&gt;"
+                  moduleName = "TablistEvents"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalipotchekin/Developer/TablistEvents/TablistEvents/HTTP.swift"
+                  timestampString = "490583695.744857"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "2006">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "TablistEvents.HTTP.requestsForURL (Swift.String, withParameters : Swift.Dictionary&lt;Swift.String, Swift.Optional&lt;Swift.AnyObject&gt;&gt;) -&gt; Swift.Optional&lt;__ObjC.NSMutableURLRequest&gt;"
+                  moduleName = "TablistEvents"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vitalipotchekin/Developer/TablistEvents/TablistEvents/HTTP.swift"
+                  timestampString = "490583695.744984"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "2222">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

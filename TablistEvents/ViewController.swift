@@ -25,23 +25,6 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             
             self.view.addSubview(loginButton)
         }
-            
-        
-        
-        
-//        if (FBSDKAccessToken.currentAccessToken() == nil){
-//            print("Not logged in")
-//        } else {
-//            print("Logged in")
-//        }
-//        
-//        let loginButton = FBSDKLoginButton()
-//        loginButton.readPermissions = ["public_profile", "email", "user_friends"]
-//        loginButton.center = self.view.center
-//        
-//        loginButton.delegate = self
-//        
-//        self.view.addSubview(loginButton)
         
     }
     

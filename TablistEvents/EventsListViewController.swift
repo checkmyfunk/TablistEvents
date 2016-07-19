@@ -50,15 +50,28 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     func loadData(){
         
         //add dictionary here
+        
+        
+        
         let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
+        //print(accessToken)
         let latitude  = "40.730610"
         let longitude = "-73.935242"
+        let center = latitude + "," + longitude
         let distance  = "1000"
         let url = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
         
+        let URLParams : [String : AnyObject?] = ["type" : "place",
+                                                 "q" : "",
+                                                 "cneter" : center,
+                                                 "distance" : distance,
+                                                 "limit" : "1000",
+                                                 "fields" : "id",
+                                                 "access_token" : FBSDKAccessToken.currentAccessToken().tokenString]
+        
         let http = HTTP()
         
-        //http.requestsForURL(<#T##url: String##String#>, withParameters: <#T##[String : AnyObject?]#>)
+        http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
         
         //pass it into http.test
         
