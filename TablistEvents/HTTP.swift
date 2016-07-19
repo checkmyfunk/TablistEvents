@@ -49,6 +49,8 @@ class HTTP {
         
         print(s)
         
-        return nil
+        let request = NSMutableURLRequest(URL: NSURL(string: s)!)
+        
+        return request
     }
 }
