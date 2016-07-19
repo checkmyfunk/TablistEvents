@@ -11,6 +11,15 @@ import FBSDKLoginKit
 
 
 class Venue {
+    
+    init() {
+    
+    }
+    
+    init(id: String) {
+        self.id = id
+    }
+    
     var id: String?
 }
 
@@ -51,40 +60,36 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         
         //add dictionary here
         
-        
-        
         let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
-        //print(accessToken)
         let latitude  = "40.730610"
         let longitude = "-73.935242"
         let center = latitude + "," + longitude
         let distance  = "1000"
-        let url = "https://graph.facebook.com/v2.5/search?type=place&q=&center=" + latitude + "," + longitude + "&distance=" + distance + "&limit=1000&fields=id&access_token=" + accessToken
-        
+
         let URLParams : [String : AnyObject?] = ["type" : "place",
                                                  "q" : "",
-                                                 "cneter" : center,
+                                                 "center" : center,
                                                  "distance" : distance,
                                                  "limit" : "1000",
                                                  "fields" : "id",
-                                                 "access_token" : FBSDKAccessToken.currentAccessToken().tokenString]
+                                                 "access_token" : accessToken]
         
         let http = HTTP()
+        let r = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
+    
+        guard let request = r else {
+            return
+        }
         
-        http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
-        
-        //pass it into http.test
-        
-        http.test(NSMutableURLRequest(URL: NSURL(string: url)!)) { (json) in
+        http.test(request) { (json) in
             
             self.allVenues = []
             //TODO: do something
             
-            if let data = json!["data"] as? [[String: AnyObject]] {
+            if let json = json, let data = json["data"] as? [[String: AnyObject]] {
                 for dataEntry in data {
                     if let id = dataEntry["id"] as? String {
-                        let tempVenue = Venue()
-                        tempVenue.id = id
+                        let tempVenue = Venue(id: id)
                         self.allVenues.append(tempVenue)
                     }
                 }
@@ -96,8 +101,6 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
             
             //check if allVenues is not empty and make a new call for Events with Venue ID's as parameter
             //call httpRequestforURL with new url,
-            
-            
             
         }
     }
