@@ -73,9 +73,6 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
             }
         })
     }
-    
-    //api call to get list of nearby events:
-    //https://graph.facebook.com/search?type=place&center=44.4325,26.1039&distance=100
 
 }
 

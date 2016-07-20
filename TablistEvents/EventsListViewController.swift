@@ -33,6 +33,7 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     
     var data = NSMutableData()
     var allVenues: [Venue] = []
+    var venueIDs: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,14 +59,14 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     
     func loadData(){
         
-        //add dictionary here
-        
         let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
         let latitude  = "40.730610"
         let longitude = "-73.935242"
         let center = latitude + "," + longitude
         let distance  = "1000"
-
+    
+        
+        //places URL parameters
         let URLParams : [String : AnyObject?] = ["type" : "place",
                                                  "q" : "",
                                                  "center" : center,
@@ -73,6 +74,7 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
                                                  "limit" : "1000",
                                                  "fields" : "id",
                                                  "access_token" : accessToken]
+        
         
         let http = HTTP()
         let r = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
@@ -103,7 +105,30 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
             //call httpRequestforURL with new url,
             
         }
+        
+        //events URL parameters
+        
+        let currentTimestamp = "\(NSDate().timeIntervalSince1970 * 1000)"
+        print (currentTimestamp)
+        
+        let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp + ")"
+        
+        for venue in allVenues {
+            guard let v = venue.id else {
+                return
+            }
+            
+            venueIDs.append(v)
+        }
+        
+        
+        let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs,
+                                                       "fields" : fields ,
+                                                       "access_token" : accessToken]
+        
     }
+    
+    
     
     //TableView methods
     
