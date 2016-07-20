@@ -43,11 +43,11 @@ class HTTP {
             } else if let i = value as? Int {
                 s = s + key + "=" + String(i) + "&"
             } else if let arr = value as? [AnyObject] {
-                let components = arr.split(isSeparator:{$0 as! String == ","}).map({ String($0) })
-                s = s + key + "=" + components
+                let tempString = arr.map({"\($0)"}).joinWithSeparator(",")
+                s = s + key + "=" + tempString
+                print(tempString)
             }
         }
-        print(s)
         let request = NSMutableURLRequest(URL: NSURL(string: s)!)
         
         return request

@@ -77,9 +77,9 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         
         
         let http = HTTP()
-        let r = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
+        let requestForPlaces = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
     
-        guard let request = r else {
+        guard let request = requestForPlaces else {
             return
         }
         
@@ -125,6 +125,19 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs,
                                                        "fields" : fields ,
                                                        "access_token" : accessToken]
+        
+        let requestForEvents = http.requestsForURL("https://graph.facebook.com/v2.5/", withParameters: eventsURLParams)
+        
+        guard let request1 = requestForEvents else {
+            return
+        }
+        
+        http.test(request1) { (json) in
+            
+            //TODO: do something
+            
+            
+        }
         
     }
     
