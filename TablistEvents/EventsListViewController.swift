@@ -24,7 +24,7 @@ class Venue {
 }
 
 class Event {
-
+    
 }
 
 class EventsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
@@ -34,6 +34,11 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     var data = NSMutableData()
     var allVenues: [Venue] = []
     var venueIDs: [String] = []
+    var allEvents: [Event] = []
+    
+    //facebook sets the limit of returned events to be no more than for 50 places
+    let venueIDLimit = 49
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,13 +91,15 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         http.test(request) { (json) in
             
             self.allVenues = []
-            //TODO: do something
             
             if let json = json, let data = json["data"] as? [[String: AnyObject]] {
                 for dataEntry in data {
                     if let id = dataEntry["id"] as? String {
                         let tempVenue = Venue(id: id)
                         self.allVenues.append(tempVenue)
+                        if self.allVenues.count >= self.venueIDLimit {
+                            return
+                        }
                     }
                 }
             }
@@ -108,10 +115,13 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         
         //events URL parameters
         
-        let currentTimestamp = "\(NSDate().timeIntervalSince1970 * 1000)"
-        print (currentTimestamp)
+        let currentTimestampString = "\(NSDate().timeIntervalSince1970)"
+        let currentTimestamp = currentTimestampString.componentsSeparatedByString(".")
         
-        let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp + ")"
+        print (currentTimestampString, currentTimestamp[0])
+        
+        
+        let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp[0] + ")"
         
         for venue in allVenues {
             guard let v = venue.id else {
@@ -135,7 +145,15 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         http.test(request1) { (json) in
             
             //TODO: do something
-            
+            self.allEvents = []
+            if let json = json, let data = json["data"] as? [[String: AnyObject]] {
+                for dataEntry in data {
+                    if let id = dataEntry["id"] as? String {
+                        let tempVenue = Venue(id: id)
+                        self.allVenues.append(tempVenue)
+                    }
+                }
+            }
             
         }
         
