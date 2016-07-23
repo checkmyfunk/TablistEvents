@@ -24,7 +24,7 @@ class Venue {
 }
 
 class Event {
-    
+    //fill out the Event class fields
 }
 
 class EventsListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
@@ -35,10 +35,8 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     var allVenues: [Venue] = []
     var venueIDs: [String] = []
     var allEvents: [Event] = []
-    
     //facebook sets the limit of returned events to be no more than for 50 places
     let venueIDLimit = 49
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,23 +61,30 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func loadData(){
-        
+        //venues URL parameters
         let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
         let latitude  = "40.730610"
         let longitude = "-73.935242"
         let center = latitude + "," + longitude
         let distance  = "1000"
-    
         
-        //places URL parameters
-        let URLParams : [String : AnyObject?] = ["type" : "place",
-                                                 "q" : "",
-                                                 "center" : center,
-                                                 "distance" : distance,
-                                                 "limit" : "1000",
-                                                 "fields" : "id",
-                                                 "access_token" : accessToken]
+        //events URL parameters
+        let currentTimestampString = "\(NSDate().timeIntervalSince1970)"
+        let currentTimestamp = currentTimestampString.componentsSeparatedByString(".")
+        let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp[0] + ")"
         
+        for venue in allVenues {
+            guard let v = venue.id else {
+                return
+            }
+            venueIDs.append(v)
+        }
+        
+        //venues URL components
+        let URLParams : [String : AnyObject?] = ["type" : "place", "q" : "", "center" : center, "distance" : distance, "limit" : "1000", "fields" : "id", "access_token" : accessToken]
+        
+        //eventsURLComponents
+        let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs, "fields" : fields, "access_token" : accessToken]
         
         let http = HTTP()
         let requestForPlaces = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
@@ -92,13 +97,13 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
             
             self.allVenues = []
             
+            //need to refactor this - to many nested "if" statements
             if let json = json, let data = json["data"] as? [[String: AnyObject]] {
                 for dataEntry in data {
                     if let id = dataEntry["id"] as? String {
-                        let tempVenue = Venue(id: id)
-                        self.allVenues.append(tempVenue)
-                        if self.allVenues.count >= self.venueIDLimit {
-                            return
+                        if self.allVenues.count <= self.venueIDLimit {
+                            let tempVenue = Venue(id: id)
+                            self.allVenues.append(tempVenue)
                         }
                     }
                 }
@@ -110,59 +115,30 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
             
             //check if allVenues is not empty and make a new call for Events with Venue ID's as parameter
             //call httpRequestforURL with new url,
-            
-        }
-        
-        //events URL parameters
-        
-        let currentTimestampString = "\(NSDate().timeIntervalSince1970)"
-        let currentTimestamp = currentTimestampString.componentsSeparatedByString(".")
-        
-        print (currentTimestampString, currentTimestamp[0])
-        
-        
-        let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp[0] + ")"
-        
-        for venue in allVenues {
-            guard let v = venue.id else {
-                return
-            }
-            
-            venueIDs.append(v)
-        }
-        
-        
-        let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs,
-                                                       "fields" : fields ,
-                                                       "access_token" : accessToken]
-        
-        let requestForEvents = http.requestsForURL("https://graph.facebook.com/v2.5/", withParameters: eventsURLParams)
-        
-        guard let request1 = requestForEvents else {
-            return
-        }
-        
-        http.test(request1) { (json) in
-            
-            //TODO: do something
-            self.allEvents = []
-            if let json = json, let data = json["data"] as? [[String: AnyObject]] {
-                for dataEntry in data {
-                    if let id = dataEntry["id"] as? String {
-                        let tempVenue = Venue(id: id)
-                        self.allVenues.append(tempVenue)
+            if (!self.allVenues.isEmpty) {
+                let requestForEvents = http.requestsForURL("https://graph.facebook.com/v2.5/", withParameters: eventsURLParams)
+                
+                guard let requestEvents = requestForEvents else {
+                    return
+                }
+                
+                http.test(requestEvents) { (json) in
+                    self.allEvents = []
+                    if let json = json, let data = json["data"] as? [[String: AnyObject]] {
+                        for dataEntry in data {
+                            if let id = dataEntry["id"] as? String {
+                                //replace this parse with events parsing instead of venue parcing
+                                let tempVenue = Venue(id: id)
+                                self.allVenues.append(tempVenue)
+                            }
+                        }
                     }
                 }
             }
-            
         }
-        
     }
     
-    
-    
     //TableView methods
-    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.allVenues.count
     }
