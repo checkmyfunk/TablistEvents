@@ -46,31 +46,31 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         self.eventsTableView.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.loadData()
         
     }
     
-    @IBAction func reload(sender: AnyObject) {
+    @IBAction func reload(_ sender: AnyObject) {
         self.loadData()
     }
     
-    @IBAction func clear(sender: AnyObject) {
+    @IBAction func clear(_ sender: AnyObject) {
         self.allVenues = []
         self.eventsTableView.reloadData()
     }
     
     func loadData(){
         //venues URL parameters
-        let accessToken: String = FBSDKAccessToken.currentAccessToken().tokenString
+        let accessToken: String = FBSDKAccessToken.current().tokenString
         let latitude  = "40.730610"
         let longitude = "-73.935242"
         let center = latitude + "," + longitude
         let distance  = "1000"
         
         //events URL parameters
-        let currentTimestampString = "\(NSDate().timeIntervalSince1970)"
-        let currentTimestamp = currentTimestampString.componentsSeparatedByString(".")
+        let currentTimestampString = "\(Date().timeIntervalSince1970)"
+        let currentTimestamp = currentTimestampString.components(separatedBy: ".")
         let fields = "id,name,cover.fields(id,source),picture.type(large),location,events.fields(id,name,cover.fields(id,source),picture.type(large),description,start_time,attending_count,declined_count,maybe_count,noreply_count).since(" + currentTimestamp[0] + ")"
         
         for venue in allVenues {
@@ -81,10 +81,10 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
         }
         
         //venues URL components
-        let URLParams : [String : AnyObject?] = ["type" : "place", "q" : "", "center" : center, "distance" : distance, "limit" : "1000", "fields" : "id", "access_token" : accessToken]
+        let URLParams : [String : AnyObject?] = ["type" : "place" as Optional<AnyObject>, "q" : "" as Optional<AnyObject>, "center" : center as Optional<AnyObject>, "distance" : distance as Optional<AnyObject>, "limit" : "1000" as Optional<AnyObject>, "fields" : "id" as Optional<AnyObject>, "access_token" : accessToken as Optional<AnyObject>]
         
         //eventsURLComponents
-        let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs, "fields" : fields, "access_token" : accessToken]
+        let eventsURLParams : [String : AnyObject?] = ["ids" : venueIDs as Optional<AnyObject>, "fields" : fields as Optional<AnyObject>, "access_token" : accessToken as Optional<AnyObject>]
         
         let http = HTTP()
         let requestForPlaces = http.requestsForURL("https://graph.facebook.com/v2.5/search", withParameters: URLParams)
@@ -139,18 +139,17 @@ class EventsListViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     //TableView methods
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.allVenues.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = self.eventsTableView.dequeueReusableCellWithIdentifier("eventCell") as! EventCell
-        cell.stationNameLabel.text = self.allVenues[indexPath.row].id
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.eventsTableView.dequeueReusableCell(withIdentifier: "eventCell") as! EventCell
+        cell.stationNameLabel.text = self.allVenues[(indexPath as NSIndexPath).row].id
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
-    
 }

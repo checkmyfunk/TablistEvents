@@ -16,7 +16,7 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         super.viewDidLoad()
         
         
-        if (FBSDKAccessToken.currentAccessToken() == nil){
+        if (FBSDKAccessToken.current() == nil){
             let loginButton : FBSDKLoginButton = FBSDKLoginButton()
             loginButton.center = self.view.center
             loginButton.readPermissions = ["public_profile", "email", "user_friends", "user_events"]
@@ -28,11 +28,11 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if (FBSDKAccessToken.currentAccessToken() != nil){
+        if (FBSDKAccessToken.current() != nil){
             // User is already logged in, do work such as go to next view controller.
-            self.performSegueWithIdentifier("showListOfEvents", sender: self)
+            self.performSegue(withIdentifier: "showListOfEvents", sender: self)
         }
         
     }
@@ -43,10 +43,10 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     }
     
     //Facebook login
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: NSError!) {
         if error == nil {
             print("Login complete")
-            self.performSegueWithIdentifier("showListOfEvents", sender: self)
+            self.performSegue(withIdentifier: "showListOfEvents", sender: self)
             self.returnUserData()
         } else {
             print(error.localizedDescription)
@@ -55,20 +55,20 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
     
     
     //Facebook logout
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         print("User logged out")
     }
     
     //Get user information
     func returnUserData() {
         let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: nil)
-        graphRequest.startWithCompletionHandler({ (connection, result, error) -> Void in
+        graphRequest.start(completionHandler: { (connection, result, error) -> Void in
             if ((error) != nil) {
                 // Process error
                 print("Error: \(error)")
             } else {
                 print("fetched user: \(result)")
-                let userName : NSString = result.valueForKey("name") as! NSString
+                let userName : NSString = result.value(forKey: "name") as! NSString
                 print("User Name is: \(userName)")
             }
         })

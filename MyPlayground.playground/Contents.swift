@@ -2,62 +2,66 @@
 
 import UIKit
 
-
-func hasAnyMatches(list: [Int], condition: (Int) -> Bool) -> Bool {
-    for item in list {
-        if condition(item) {
-            return true
+enum Rank: Int {
+    case Ace = 1
+    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+    case Jack, Queen, King
+    func simpleDescription() -> String {
+        switch self {
+        case .Ace:
+            return "ace"
+        case .Jack:
+            return "jack"
+        case .Queen:
+            return "queen"
+        case .King:
+            return "king"
+        default:
+            return String(self.rawValue)
         }
     }
-    return false
 }
-func lessThanTen(number: Int) -> Bool {
-    return number < 10
-}
-var numbers = [20, 19, 1, 12]
-hasAnyMatches(numbers, condition: lessThanTen)
 
-numbers.map({
-    (number: Int) -> Int in
-    var result = 0
-    
-    if number % 2 == 0 {
-        result = number
-    } else {
-        result = 0
-    }
-    
-    return result
-})
-
-let mappedNumbers = numbers.map({ number in 3 * number })
-print(mappedNumbers)
-
-let sortedNumbers = numbers.sort { $0 > $1 }
-print(sortedNumbers)
-
-
-//-----
-
-class Shape {
-    var numberOfSides = 0
-    var color: String
-    var name: String
-    
-    init(name: String, color: String){
-        self.name = name
-        self.color = color
-    }
-    
+enum Suit {
+    case Spades, Hearts, Diamonds, Clubs
     func simpleDescription() -> String {
-        return "A \(name) has \(numberOfSides) sides."
+        switch self {
+        case .Spades:
+            return "spades"
+        case .Hearts:
+            return "hearts"
+        case .Diamonds:
+            return "diamonds"
+        case .Clubs:
+            return "clubs"
+        }
     }
-    func changeColor(color: String){
-        self.color = color
+    
+    func color() -> String{
+        switch self {
+        case.Clubs:
+            return "black"
+        case.Spades:
+            return "black"
+        case.Diamonds:
+            return "red"
+        case.Hearts:
+            return "red"
+        }
+    }
+    
+}
+let hearts = Suit.Hearts
+let heartsDescription = hearts.simpleDescription()
+let heartsColor = hearts.color()
+
+struct Card {
+    var rank: Rank
+    var suit: Suit
+    func simpleDescription() -> String {
+        return "The \(rank.simpleDescription()) of \(suit.simpleDescription())"
     }
 }
-
-var shape = Shape(name: "pentagon", color: "blue")
-shape.numberOfSides = 5
-var shapeDescription = shape.simpleDescription()
+let threeOfSpades = Card(rank: .Three, suit: .Spades)
+let threeOfSpadesDescription = threeOfSpades.simpleDescription()
 
